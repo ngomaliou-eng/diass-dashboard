@@ -126,4 +126,4 @@ const styles = {
     cursor: "pointer",
     marginTop: 4,
   },
-};
+}

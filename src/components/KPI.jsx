@@ -1,38 +1,67 @@
+const ICONES = {
+  "Puissance instantanée":  "⚡",
+  "Irradiance solaire":      "☀️",
+  "Énergie produite (jour)": "🔋",
+  "Onduleurs actifs":        "🔧",
+  "Ratio de performance":    "📊",
+};
+
 export default function KPI({ label, valeur, unite, couleur }) {
+  const icone = ICONES[label] ?? "📌";
+
   return (
-    <div style={styles.card}>
-      <p style={styles.label}>{label}</p>
-      <p style={{ ...styles.valeur, color: couleur }}>{valeur}</p>
-      <p style={styles.unite}>{unite}</p>
+    <div style={s.card}>
+      {/* Titre en haut — plus visible */}
+      <p style={s.label}>{label}</p>
+
+      {/* Icône */}
+      <span style={s.icone}>{icone}</span>
+
+      {/* Valeur + unité sur la même ligne */}
+      <div style={s.valeurRow}>
+        <span style={{ ...s.valeur, color: couleur }}>{valeur}</span>
+        {unite && <span style={{ ...s.unite, color: couleur }}>{unite}</span>}
+      </div>
     </div>
   );
 }
 
-const styles = {
+const s = {
   card: {
-    background: "#f8fafc",
-    borderRadius: 8,
-    padding: "12px 16px",
-    border: "1px solid #e0e4ea",
+    background: "#fff",
+    borderRadius: 12,
+    padding: "14px 16px",
+    border: "1px solid #e9ecef",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+    display: "flex",
+    flexDirection: "column",
+    gap: 6,
   },
   label: {
-    fontSize: 13,        // ← 10 → 13
-    color: "#444",       // ← #888 → #444 (plus foncé)
+    fontSize: 13,           // ← plus grand
+    color: "#1a1a2e",       // ← plus foncé
     textTransform: "uppercase",
-    letterSpacing: "0.04em",
-    fontWeight: 600,     // ← ajouté
-    margin: "0 0 6px",  // ← 3px → 6px
+    letterSpacing: "0.05em",
+    fontWeight: 700,        // ← plus gras
+    margin: "0 0 4px",
+  },
+  icone: {
+    fontSize: 22,
+  },
+  valeurRow: {
+    display: "flex",
+    alignItems: "baseline", // ← unité alignée avec la valeur
+    gap: 6,
   },
   valeur: {
-    fontSize: 26,        // ← 22 → 26
-    fontWeight: 700,     // ← 600 → 700
+    fontSize: 28,
+    fontWeight: 700,
     margin: 0,
     lineHeight: 1.1,
   },
   unite: {
-    fontSize: 13,        // ← 11 → 13
-    color: "#555",       // ← #aaa → #555 (plus foncé)
-    fontWeight: 500,     // ← ajouté
-    margin: "4px 0 0",  // ← 2px → 4px
+    fontSize: 14,           // ← plus grand
+    fontWeight: 600,
+    margin: 0,
   },
 };
