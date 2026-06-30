@@ -36,7 +36,7 @@ export default function Dashboard({ token, onLogout }) {
 
   const irr     = donnees?.irradiance_wm2    ?? 0;
   const pr      = donnees?.ratio_performance ?? 0;
-  const ecartPR = donnees?.ecart_pr          ?? 0;
+
 
   // Badges
   const badgeIrr = irr > 700 ? { txt: "Excellent", cls: "ok" }
