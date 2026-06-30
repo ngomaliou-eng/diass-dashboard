@@ -5,9 +5,9 @@ import Onduleur from "./components/Onduleur";
 import Graphique from "./components/Graphique";
 
 export default function Dashboard({ token, onLogout }) {
-  const [donnees, setDonnees]     = useState(null);
+  const [donnees, setDonnees]       = useState(null);
   const [historique, setHistorique] = useState([]);
-  const [heure, setHeure]         = useState("—");
+  const [heure, setHeure]           = useState("—");
 
   const charger = async () => {
     try {
@@ -25,12 +25,8 @@ export default function Dashboard({ token, onLogout }) {
     charger();
     const id = setInterval(charger, 10000);
     return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
-  useEffect(() => {
-  charger();
-  const id = setInterval(charger, 10000);
-  return () => clearInterval(id);
-  }, [token, charger]);  // ← ajout de charger
 
   const onduleurs = donnees?.onduleurs ?? [];
   const nbOk     = onduleurs.filter(o => o.statut?.toLowerCase() === "ok").length;
@@ -38,16 +34,14 @@ export default function Dashboard({ token, onLogout }) {
   const nbHors   = onduleurs.filter(o => o.statut?.toLowerCase() === "hors_ligne").length;
   const nbTotal  = onduleurs.length || 32;
 
- 
+  const irr     = donnees?.irradiance_wm2    ?? 0;
+  const pr      = donnees?.ratio_performance ?? 0;
+  const ecartPR = donnees?.ecart_pr          ?? 0;
 
   // Badges
   const badgeIrr = irr > 700 ? { txt: "Excellent", cls: "ok" }
                  : irr > 300 ? { txt: "Modéré",    cls: "warn" }
                  :             { txt: "Faible",     cls: "err"  };
-
-  const badgePR  = pr >= 80 ? { txt: "Bon",   cls: "ok"   }
-                 : pr >= 60 ? { txt: "Moyen", cls: "warn" }
-                 :            { txt: "Faible", cls: "err"  };
 
   const badgeOnd = nbHors > 0
     ? { txt: `${nbHors} hors ligne`,  cls: "err"  }
@@ -60,11 +54,6 @@ export default function Dashboard({ token, onLogout }) {
   const pct = donnees
     ? `${((donnees.puissance_mw / PNOM_MW) * 100).toFixed(0)}% capacité`
     : "—";
-
-  // Badge écart PR
-  const badgeEcart = ecartPR >= 0
-    ? { txt: `▲ +${ecartPR}% vs théorique`, cls: "ok"   }
-    : { txt: `▼ ${ecartPR}% vs théorique`,  cls: ecartPR < -5 ? "err" : "warn" };
 
   return (
     <div style={s.page}>
