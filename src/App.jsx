@@ -6,6 +6,5 @@ export default function App() {
   const [token, setToken] = useState(null);
 
   if (!token) return <Login onLogin={setToken} />;
-  return <Dashboard token={token} onDeconnexion={() => setToken(null)} />;
+  return <Dashboard token={token} onLogout={() => setToken(null)} />;
 }
-
