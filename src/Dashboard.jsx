@@ -26,6 +26,11 @@ export default function Dashboard({ token, onLogout }) {
     const id = setInterval(charger, 10000);
     return () => clearInterval(id);
   }, [token]);
+  useEffect(() => {
+  charger();
+  const id = setInterval(charger, 10000);
+  return () => clearInterval(id);
+  }, [token, charger]);  // ← ajout de charger
 
   const onduleurs = donnees?.onduleurs ?? [];
   const nbOk     = onduleurs.filter(o => o.statut?.toLowerCase() === "ok").length;
@@ -33,10 +38,7 @@ export default function Dashboard({ token, onLogout }) {
   const nbHors   = onduleurs.filter(o => o.statut?.toLowerCase() === "hors_ligne").length;
   const nbTotal  = onduleurs.length || 32;
 
-  const irr          = donnees?.irradiance_wm2      ?? 0;
-  const pr           = donnees?.ratio_performance   ?? 0;
-  const prTheorique  = donnees?.pr_theorique        ?? 0;
-  const ecartPR      = donnees?.ecart_pr            ?? 0;
+ 
 
   // Badges
   const badgeIrr = irr > 700 ? { txt: "Excellent", cls: "ok" }
