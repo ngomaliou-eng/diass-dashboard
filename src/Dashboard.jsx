@@ -7,14 +7,14 @@ import Graphique from "./components/Graphique";
 export default function Dashboard({ token, onLogout }) {
   const [donnees, setDonnees]       = useState(null);
   const [historique, setHistorique] = useState([]);
-  const [heure, setHeure]           = useState("—");
+  const [heure, setHeure] = useState("—");
 
   const charger = async () => {
     try {
       const [d, h] = await Promise.all([getDonnees(token), getHistorique(token)]);
       setDonnees(d);
       setHistorique(h);
-      setHeure(d.timestamp ?? new Date().toLocaleTimeString("fr-FR"));
+     setHeure(d.timestamp ?? new Date().toLocaleString("fr-FR"));
     } catch (e) {
       console.error(e);
       if (e.message.includes("401")) onLogout();
