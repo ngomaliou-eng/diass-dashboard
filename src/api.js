@@ -1,4 +1,4 @@
-const BASE = "https://diass-api-i6zr.onrender.com";
+const BASE = "https://diass-api-1.onrender.com"
 
 export async function login(identifiant, motDePasse) {
   // L'API utilise OAuth2PasswordRequestForm → form-urlencoded

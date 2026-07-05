@@ -126,7 +126,7 @@ export default function Dashboard({ token, onLogout }) {
 
         <div style={s.footer}>
           Centrale Photovoltaïque de DIASS &nbsp;|&nbsp; SENELEC &nbsp;|&nbsp;
-          Développé par Aliou Ngom — Stage ingénierie
+          Développé par Aliou Ngom — Stage ingénieur
         </div>
       </div>
     </div>
