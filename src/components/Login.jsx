@@ -1,7 +1,6 @@
 import { useState } from "react";
-import logoEpt     from "./assets/LOGO EPT.png";
-import logoSenelec from "./assets/senelec-logo.png";
-import champPV     from "./assets/Champs solaire.jpg";
+import logoEpt     from "../assets/LOGO EPT.jpg";
+import logoSenelec from "../assets/senelec-logo.png";
 
 export default function Login({ onLogin }) {
   const [identifiant, setIdentifiant] = useState("");
@@ -24,13 +23,14 @@ export default function Login({ onLogin }) {
 
   return (
     <div style={{
-      minHeight:       "100vh",
-      backgroundImage: `url(${champPV})`,
-      backgroundSize:  "cover",
+      minHeight:          "100vh",
+      backgroundImage:    `url('https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1920&q=80')`,
+      backgroundSize:     "cover",
       backgroundPosition: "center",
-      display:         "flex",
-      alignItems:      "center",
-      justifyContent:  "center",
+      display:            "flex",
+      alignItems:         "center",
+      justifyContent:     "center",
+      position:           "relative",
     }}>
 
       {/* Overlay sombre */}
