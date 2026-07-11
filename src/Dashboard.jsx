@@ -4,6 +4,7 @@ import KPI from "./components/KPI";
 import PTR from "./components/PTR";
 import Graphique from "./components/Graphique";
 import Historique from "./components/Historique";
+import logoSenelec from "./assets/senelec-logo.png";
 
 export default function Dashboard({ token, onLogout }) {
   const [donnees, setDonnees]                 = useState(null);
@@ -83,7 +84,10 @@ export default function Dashboard({ token, onLogout }) {
       {/* Header */}
       <div style={s.topbar}>
         <div>
-          <div style={s.brand}>⚡ <span style={{ color: "#1D9E75" }}>DIASS</span> — Supervision PV</div>
+          <div style={s.brand}>
+  <img src={logoSenelec} alt="SENELEC" style={{ height: 35, objectFit: "contain", marginRight: 8, verticalAlign: "middle" }} />
+  <span style={{ color: "#1D9E75" }}>DIASS</span> — Supervision PV
+</div>
           <div style={s.maj}>Dernière mise à jour : {heure}</div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
