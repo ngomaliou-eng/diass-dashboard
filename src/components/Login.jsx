@@ -1,129 +1,138 @@
 import { useState } from "react";
-import { login } from "../api";
+import logoEpt     from "./assets/LOGO EPT.png";
+import logoSenelec from "./assets/senelec-logo.png";
+import champPV     from "./assets/Champs solaire.jpg";
 
 export default function Login({ onLogin }) {
   const [identifiant, setIdentifiant] = useState("");
-  const [motDePasse, setMotDePasse] = useState("");
-  const [erreur, setErreur] = useState("");
-  const [chargement, setChargement] = useState(false);
+  const [motDePasse,  setMotDePasse]  = useState("");
+  const [erreur,      setErreur]      = useState("");
+  const [chargement,  setChargement]  = useState(false);
 
-  const handleSubmit = async () => {
-    setErreur("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setChargement(true);
+    setErreur("");
     try {
-      const token = await login(identifiant, motDePasse);
-      onLogin(token);
-    } catch (e) {
-      setErreur(e.message);
+      await onLogin(identifiant, motDePasse);
+    } catch (err) {
+      setErreur("Identifiant ou mot de passe incorrect");
     } finally {
       setChargement(false);
     }
   };
 
-  const handleKey = (e) => {
-    if (e.key === "Enter") handleSubmit();
-  };
-
   return (
-    <div style={styles.page}>
-      <div style={styles.card}>
-        <div style={styles.logo}>⚡</div>
-        <h1 style={styles.titre}>Centrale PV de Diass</h1>
-        <p style={styles.sous}>Connectez-vous pour accéder au tableau de bord</p>
+    <div style={{
+      minHeight:       "100vh",
+      backgroundImage: `url(${champPV})`,
+      backgroundSize:  "cover",
+      backgroundPosition: "center",
+      display:         "flex",
+      alignItems:      "center",
+      justifyContent:  "center",
+    }}>
 
-        <input
-          style={styles.input}
-          type="text"
-          placeholder="Identifiant"
-          value={identifiant}
-          onChange={(e) => setIdentifiant(e.target.value)}
-          onKeyDown={handleKey}
-        />
-        <input
-          style={styles.input}
-          type="password"
-          placeholder="Mot de passe"
-          value={motDePasse}
-          onChange={(e) => setMotDePasse(e.target.value)}
-          onKeyDown={handleKey}
-        />
+      {/* Overlay sombre */}
+      <div style={{
+        position:   "absolute",
+        inset:      0,
+        background: "rgba(0,0,0,0.55)",
+      }} />
 
-        {erreur && <p style={styles.erreur}>{erreur}</p>}
+      {/* Carte de connexion */}
+      <div style={{
+        position:     "relative",
+        zIndex:       1,
+        background:   "rgba(255,255,255,0.95)",
+        borderRadius: 16,
+        padding:      "2rem 2.5rem",
+        width:        340,
+        boxShadow:    "0 8px 32px rgba(0,0,0,0.25)",
+      }}>
 
-        <button
-          style={{ ...styles.btn, opacity: chargement ? 0.7 : 1 }}
-          onClick={handleSubmit}
-          disabled={chargement}
-        >
-          {chargement ? "Connexion…" : "Se connecter"}
-        </button>
+        {/* Logos */}
+        <div style={{
+          display:        "flex",
+          justifyContent: "space-between",
+          alignItems:     "center",
+          marginBottom:   "1.5rem",
+        }}>
+          <img src={logoSenelec} alt="SENELEC" style={{ height: 50, objectFit: "contain" }} />
+          <img src={logoEpt}     alt="EPT"     style={{ height: 50, objectFit: "contain" }} />
+        </div>
+
+        {/* Titre */}
+        <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+          <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#0F3D6E" }}>
+            ⚡ Supervision PV — Diass
+          </div>
+          <div style={{ fontSize: "0.8rem", color: "#6c757d", marginTop: 4 }}>
+            SENELEC — Centrale Photovoltaïque
+          </div>
+        </div>
+
+        {/* Formulaire */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <input
+            type="text"
+            placeholder="Identifiant"
+            value={identifiant}
+            onChange={e => setIdentifiant(e.target.value)}
+            style={s.input}
+          />
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            value={motDePasse}
+            onChange={e => setMotDePasse(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleSubmit(e)}
+            style={s.input}
+          />
+
+          {erreur && (
+            <div style={{ color: "#A32D2D", fontSize: "0.82rem", textAlign: "center" }}>
+              {erreur}
+            </div>
+          )}
+
+          <button
+            onClick={handleSubmit}
+            disabled={chargement}
+            style={s.btn}
+          >
+            {chargement ? "Connexion..." : "Se connecter"}
+          </button>
+        </div>
+
+        {/* Footer */}
+        <div style={{ textAlign: "center", fontSize: "0.72rem", color: "#6c757d", marginTop: "1.2rem" }}>
+          Centrale PV de Diass &nbsp;|&nbsp; SENELEC &nbsp;|&nbsp; EPT
+        </div>
       </div>
     </div>
   );
 }
 
-const styles = {
-  page: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#f4f6f9",
-    fontFamily: "'Segoe UI', sans-serif",
-  },
-  card: {
-    background: "#fff",
-    borderRadius: 12,
-    padding: "36px 32px",
-    width: 380,
-    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-    display: "flex",
-    flexDirection: "column",
-    gap: 0,
-  },
-  logo: {
-    fontSize: 36,
-    textAlign: "center",
-    marginBottom: 8,
-  },
-  titre: {
-    fontSize: 20,
-    fontWeight: 600,
-    textAlign: "center",
-    margin: 0,
-    color: "#1a5fa8",
-  },
-  sous: {
-    fontSize: 13,
-    color: "#888",
-    textAlign: "center",
-    margin: "6px 0 20px",
-  },
+const s = {
   input: {
-    width: "100%",
-    padding: "10px 12px",
-    border: "1px solid #dde2ea",
-    borderRadius: 7,
-    fontSize: 14,
-    marginBottom: 10,
-    outline: "none",
-    boxSizing: "border-box",
-  },
-  erreur: {
-    color: "#e74c3c",
-    fontSize: 13,
-    margin: "0 0 8px",
+    padding:      "10px 14px",
+    borderRadius: 8,
+    border:       "1px solid #dee2e6",
+    fontSize:     "0.9rem",
+    outline:      "none",
+    width:        "100%",
+    boxSizing:    "border-box",
   },
   btn: {
-    width: "100%",
-    padding: "11px",
-    background: "#1a5fa8",
-    color: "#fff",
-    border: "none",
-    borderRadius: 7,
-    fontSize: 14,
-    fontWeight: 600,
-    cursor: "pointer",
-    marginTop: 4,
+    padding:      "10px",
+    borderRadius: 8,
+    border:       "none",
+    background:   "#0F3D6E",
+    color:        "#fff",
+    fontSize:     "0.95rem",
+    fontWeight:   600,
+    cursor:       "pointer",
+    marginTop:    4,
   },
-}
+};
